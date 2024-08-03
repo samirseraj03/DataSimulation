@@ -1,0 +1,8 @@
+fastapi
+pathlib
+starlette
+dotenv
+datetime
+psycopg2
+os
+re
