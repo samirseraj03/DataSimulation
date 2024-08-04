@@ -7,134 +7,92 @@ from fastapi.encoders import jsonable_encoder
 from starlette.requests import Request
 
 import QueryDatabase
-
- 
+import tools
 
 app = FastAPI()
-
-# Ruta para servir archivos estáticos como javascript y css
+# Path to serve static files like javascript and css
 app.mount("/static", StaticFiles(directory="static"), name="static")
-# para servir templates de html
+# to serve html templates
 templates = Jinja2Templates(directory="templates")
- 
- 
-# Ruta para servir el index.html
+
+
+
+# Route to serve the index.html
 @app.get("/", response_class=HTMLResponse)
-async def read_index():
-    index_file = Path("templates/index.html")
-    return index_file.read_text(encoding="utf-8")
+async def read_index(request: Request):
+    # this is only test grafic
+    data = QueryDatabase.get_data_simulations('SIM789')
+    chart_data = tools.generate_chart(data)
+
+    #index_file = Path("templates/index.html")
+    return templates.TemplateResponse("index.html", {"request": request, "chart_data": chart_data})
 
 
-
+# api to get all data simulations
 @app.get("/simulations", response_class=HTMLResponse)
 async def get_simulations(request : Request):
-    try:
-        data = QueryDatabase.get_simulations()
-        if data:
-            return JSONResponse(content=jsonable_encoder(data), status_code=200)
-        else:
-            return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
-    except Exception as e:
-        print(e)
-        return templates.TemplateResponse("500.html", {"request": request}, status_code=500)
+    return await handle_request(lambda: QueryDatabase.get_simulations(), request)
 
 
-
-    
+# api to filter simulations indicating state  
 @app.get("/simulations/{state}", response_class=HTMLResponse)
 async def get_simulations( state: str , request : Request):
-    try:
-        data = QueryDatabase.filter_simulations_bystat(state)
-        if data:
-            return JSONResponse(content=jsonable_encoder(data), status_code=200)
-        else:
-            return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
-    except Exception as e:
-        print(e)
-        return templates.TemplateResponse("500.html", {"request": request}, status_code=500)
-    
+    return await handle_request(lambda: QueryDatabase.filter_simulations_bystat(state), request)
 
 
+# api to order data simulations with name and start date
 @app.get("/order", response_class=HTMLResponse)
 async def order_simulations(request : Request):
-    
-    try:
-        data = QueryDatabase.OrderList()
-        if not data:
-            return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
-        else:
-            return JSONResponse(content=jsonable_encoder(data), status_code=200)
-
-    except Exception as e:
-        print(e)
-        return templates.TemplateResponse("500.html", {"request": request}, status_code=500)
+    return await handle_request(lambda: QueryDatabase.OrderList(), request)
 
 
-
-
+# api to search machine avaiable
 @app.get("/machines/available", response_class=HTMLResponse)
 async def get_machines_avaiable(request : Request):
-    try:
-        data = QueryDatabase.get_machines_available()
-        if data:
-            return JSONResponse(content=jsonable_encoder(data), status_code=200)
-        else:
-            return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
-    except Exception as e:
-        print(e)
-        return templates.TemplateResponse("500.html", {"request": request}, status_code=500)
+    return await handle_request(lambda: QueryDatabase.get_machines_available(), request)
 
 
-
-# class SimulationData(BaseModel):
-#     simulation_id: str
-#     name: str
-#     status : str
-#     start_date : str
-#     end_date : str
-#     machine_id : str
-
-
-
+# api to post/create new simulation
+#The list should appear like this:
+"""
+    'simulation_id' : 'SAM105',
+       'name' : 'For IA' ,
+       'status' : 'Pending',
+       'start_date' : today,
+       'end_date' : today,
+       'machine_id' : 'MACHINE_F'
+"""
 @app.post("/simulations", response_class=HTMLResponse)
 async def create_simulations(request: Request):
 
     form_data = await request.form()  # Obtener datos del formulario
-    data = {key: form_data.get(key) for key in form_data}
-    
-    try:
-        data = QueryDatabase.post_simulation()
-        if data:
-            return JSONResponse(content=data, status_code=200)
-        else:
-            return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
-    except Exception as e:
-        print(e)
-        return templates.TemplateResponse("500.html", {"request": request}, status_code=500)
-    
+    list = {key: form_data.get(key) for key in form_data}
+    return await handle_request(lambda: QueryDatabase.post_simulation(list), request)
 
 
+
+# api to get detailed information of simulation specifying the id_simulation
 @app.get("/simulations/detailed/{id_simulation}", response_class=HTMLResponse)
 async def get_detailed_simulation(id_simulation: str , request : Request):
-    try:
-        data = QueryDatabase.get_detailed_simulation(id_simulation)
-        if data:
-            return JSONResponse(content=jsonable_encoder(data), status_code=200)
-        else:
-            return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
-    except Exception as e:
-        print(e)
-        return templates.TemplateResponse("500.html", {"request": request}, status_code=500)
+    return await handle_request(lambda: QueryDatabase.get_detailed_simulation(id_simulation), request)
+ 
+
+# api to get grafic
+@app.get("/simulations/grafic/{id_simulation}", response_class=HTMLResponse)
+async def get_grafic(id_simulation: str , request : Request):
+    return await handle_request(lambda: tools.generate_chart(id_simulation), request) 
 
 
-
-
-""" function check is machine running , if running , frontend  recive the machine is ruuning to do grafh in realtime
-    else the frontend recive all data  """
+""" 
+Function to check if the machine is working, 
+if it is working, the frontend receives that the machine is working and obtains data for the graph in real time, 
+when the machine is no longer working, it receives everything  
+"""
 @app.get("/simulations/data/{id_simulation}", response_class=HTMLResponse)
 async def get_data_simulation(id_simulation: str , request : Request):
 
-    try:     
+    try:
+        # when the machine is running , we get latest data    
         data = QueryDatabase.get_data_simulations_realtime(id_simulation)  
         if not data or len(data) == 0:
             return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
@@ -142,8 +100,8 @@ async def get_data_simulation(id_simulation: str , request : Request):
         data = data[0]
         if data[7] == 'running':
             return JSONResponse(content=jsonable_encoder(data), status_code=200)
-        else:    
-            # Cuando el estado ya no es 'running', obtenemos los datos completos de la simulación
+        else: 
+            # When the state is no longer 'running', we get the full simulation data   
             data = QueryDatabase.get_data_simulations(id_simulation)
             if not data or len(data) == 0:
                  return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
@@ -157,7 +115,22 @@ async def get_data_simulation(id_simulation: str , request : Request):
 
 
 
-# Ejecutar la aplicación usando uvicorn
+#function to manage the request and return with a status
+async def handle_request(query_func, request: Request):
+    try:        
+        data = query_func()
+        print (data)
+        if data:
+            return JSONResponse(content=jsonable_encoder(data), status_code=200)
+        else:
+            return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+    except Exception as e:
+        print(e)
+        return templates.TemplateResponse("500.html", {"request": request}, status_code=500)
+
+
+
+# Run the application using uvicorn
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

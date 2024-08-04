@@ -4,7 +4,6 @@ from datetime import datetime , timedelta
 
 import psycopg2
 import os
-import tools
 
 # load  variabls
 load_dotenv()
@@ -77,123 +76,84 @@ class Database:
 
 
 
-# function to get all simulations
-def get_simulations():
-    # Uso de la clase Database
+# function to execute the query and return data
+def handle_query(query):
     try:
-        query = f"""SELECT * FROM simulations _s 
-                INNER JOIN machines _m ON  _s.machine_id = _m.machine_id"""
-
-        # use class data base to get query
+    # Using the Database class
         with Database() as db:
             rows = db.execute(query)
             return rows
-            #for row in rows:
-            #     print(row)
-
     except Exception as e:
-        print(f"Problem has occurried: {e}")
+       print(f"Problem has occurried: {e}")
 
 
+
+# function to get all simulations
+def get_simulations():
+    query = f"""SELECT * FROM simulations _s 
+                INNER JOIN machines _m ON  _s.machine_id = _m.machine_id"""
+    return handle_query(query)
+
+
+# function to filter list simulation by state from data base
 def filter_simulations_bystat(state):
-    states = ['pending' , 'running' , 'finished' ]
-    try:
-        if (state in states):
-            query = f"""SELECT * FROM simulations _s 
+
+    query = f"""SELECT * FROM simulations _s 
                 FULL JOIN machines _m ON  _s.machine_id = _m.machine_id 
                 WHERE _s.status = '{state}'"""
-            print (query)
-            with Database() as db:
-                rows = db.execute(query)
-                for row in rows:
-                  print(row)
-                return rows 
-    except Exception as e:
-        print(f"Problem has occurried: {e}")
+    
+    states = ['pending' , 'running' , 'finished' ]
+
+    if (state in states):
+        return handle_query(query)
 
 
+# function to get order list simulation data from data base
 def OrderList():
-    try:
-            query = """SELECT * FROM simulations _s 
+    query = """SELECT * FROM simulations _s 
             FULL JOIN machines _m ON  _s.machine_id = _m.machine_id 
             ORDER BY _s.name , start_date"""
-            with Database() as db:
-                rows = db.execute(query)
-                return rows 
-    except Exception as e:
-        print(f"Problem has occurried: {e}")
+    return handle_query(query)
 
-
+# function to get machine avaialable from data base
 def get_machines_available():
-    try:
-            query = """SELECT  _m.*,'available' AS available
-                    FROM  machines _m
-                    LEFT JOIN simulations _s ON _s.machine_id = _m.machine_id
-                    WHERE _s.machine_id IS NULL AND _m.type_machine = 'fixtures';"""
-            print (query)
-            with Database() as db:
-                rows = db.execute(query)
-                for row in rows:
-                  print(row)
-                return rows 
-    except Exception as e:
-        print(f"Problem has occurried: {e}")
 
+    query = """SELECT  _m.*,'available' AS available
+            FROM  machines _m
+            LEFT JOIN simulations _s ON _s.machine_id = _m.machine_id
+            WHERE _s.machine_id IS NULL AND _m.type_machine = 'fixtures';"""
+    return handle_query(query)
 
-
+# create new data simulation to data base
 def post_simulation(list):
-    
-    try:
-        query = f"""INSERT INTO simulations (simulation_id , name , status , start_date , end_date , machine_id) values (
+
+    query = f"""INSERT INTO simulations (simulation_id , name , status , start_date , end_date , machine_id) values (
                 '{list['simulation_id']}' , '{list['name']}' , '{list['status']}' , '{list['start_date'] }', '{list['end_date']}' , '{list['machine_id']}' ) returning simulation_id"""
-        with Database() as db:
-            rows = db.execute(query)   
-            for row in rows:
-                print(row)
-                return rows         
-    except Exception as e:
-        print(f"Problem has occurried: {e}")
 
+    return handle_query(query)
 
+# function to get deatiled simulation 
 def get_detailed_simulation(simulation_id):
-
-    try:
-        query = f""" SELECT * FROM simulations WHERE simulation_id = '{simulation_id}' """
-        with Database() as db:
-            rows = db.execute(query)   
-            for row in rows:
-                print(row)
-                return rows         
-    except Exception as e:
-        print(f"Problem has occurried: {e}")
+    query = f""" SELECT * FROM simulations WHERE simulation_id = '{simulation_id}' """
+    return handle_query(query)
 
 
+# function to get latest data_simulation specifying the id_simulation
 def get_data_simulations_realtime(simulation_id):
-    try:
-        query = f""" SELECT * FROM data_simulations INNER JOIN simulations _s ON  _s.simulation_id = data_simulations.simulation_id  
+
+    query = f""" SELECT * FROM data_simulations INNER JOIN simulations _s ON  _s.simulation_id = data_simulations.simulation_id  
                  WHERE data_simulations.simulation_id = '{simulation_id}' ORDER BY data_id  DESC LIMIT 1; """
-        with Database() as db:
-            rows = db.execute(query)   
-            for row in rows:
-                print(row)
-                return rows         
-    except Exception as e:
-        print(f"Problem has occurried: {e}")
+    return handle_query(query)
 
 
+# function to get all data simulation
 def get_data_simulations(simulation_id):
-    try:
-        query = f""" SELECT * FROM data_simulations WHERE simulation_id = '{simulation_id}'  """
-        with Database() as db:
-            rows = db.execute(query)   
-            for row in rows:
-                print(row)
-                return rows         
-    except Exception as e:
-        print(f"Problem has occurried: {e}")
+  
+    query = f""" SELECT * FROM data_simulations WHERE simulation_id = '{simulation_id}'  """
+    return handle_query(query)
+
 
 
 if __name__ == '__main__':
-
-    get_data_simulations_realtime('SIM456')
+    OrderList()
 

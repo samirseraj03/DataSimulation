@@ -1,47 +1,56 @@
 
 from datetime import datetime , timedelta
-import re
+import matplotlib.pyplot as plt
+import io
+import base64
 
 
 def chop_microseconds(delta):
     return delta.replace(microsecond=0)
-       
+ 
 
-def parse_multipart_form_data(data):
-    """Parses multipart/form-data encoded data into a JSON object.
+# Generar gráfico
+def generate_chart(data):
 
-    Args:
-        data: The multipart/form-data encoded data as a string.
+    seconds = [row[3] for row in data]
+    loss = [row[4] for row in data]
 
-    Returns:
-        A dictionary representing the parsed form data.
-    """
+    plt.title("Simple grafic")
+    plt.figure(figsize=(10, 6))
 
-    boundary = re.search(r"boundary=(.*)", data, re.DOTALL).group(1)
-    parts = data.split(f"--{boundary}")
+    plt.xlabel("Seconds")
+    plt.ylabel("Loss")
+    plt.plot(seconds, loss , marker='o')
 
-    form_data = {}
-    for part in parts[1:-1]:
-        lines = part.splitlines()
-        name = re.search(r'name="(.*)"', lines[1]).group(1)
-        value = "\n".join(lines[2:-2])
-        form_data[name] = value
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    return base64.b64encode(buf.read()).decode('utf-8')
 
-    return form_data
 
 
 
 if __name__ == '__main__':
 
+    data = [
+    [6, "SIM789", "MACHINE_B", 10, 0.55],
+    [7, "SIM789", "MACHINE_B", 20, 0.5],
+    [8, "SIM789", "MACHINE_B", 30, 0.45],
+    [9, "SIM789", "MACHINE_B", 40, 0.4],
+    [10, "SIM789", "MACHINE_B", 50, 0.35]
+]
 
-    list = {
-       'simulation_id' : 'SAM105',
-       'name' : 'For IA' ,
-       'status' : 'Pending',
-       'start_date' : chop_microseconds(datetime.today()),
-       'end_date' : chop_microseconds(datetime.today() + datetime.timedelta(days = 1) ),
-       'machine_id' : 'MACHINE_F'
-    }
+    print(generate_chart(data))
 
-    print (list)
-    print (chop_microseconds(datetime.today()))
+
+    # list = {
+    #    'simulation_id' : 'SAM105',
+    #    'name' : 'For IA' ,
+    #    'status' : 'Pending',
+    #    'start_date' : chop_microseconds(datetime.today()),
+    #    'end_date' : chop_microseconds(datetime.today() + datetime.timedelta(days = 1) ),
+    #    'machine_id' : 'MACHINE_F'
+    # }
+
+    # print (list)
+    # print (chop_microseconds(datetime.today()))

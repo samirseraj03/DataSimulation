@@ -6,3 +6,6 @@ datetime
 psycopg2
 os
 re
+matplotlib
+io
+base64
