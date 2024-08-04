@@ -12,8 +12,9 @@ import QueryDatabase
 
 app = FastAPI()
 
-# Ruta para servir archivos estáticos
+# Ruta para servir archivos estáticos como javascript y css
 app.mount("/static", StaticFiles(directory="static"), name="static")
+# para servir templates de html
 templates = Jinja2Templates(directory="templates")
  
  
@@ -57,7 +58,6 @@ async def get_simulations( state: str , request : Request):
 @app.get("/order", response_class=HTMLResponse)
 async def order_simulations(request : Request):
     
-
     try:
         data = QueryDatabase.OrderList()
         if not data:
