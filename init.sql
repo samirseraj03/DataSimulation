@@ -3,17 +3,30 @@
 DO
 $$
 BEGIN
-    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'MachineSimulator') THEN
-        -- Si no existe, crea la base de datos
-        CREATE DATABASE MachineSimulator;
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_language
+        WHERE lanname = 'plpgsql'
+    ) THEN
+        CREATE LANGUAGE plpgsql;
     END IF;
 END
 $$;
 
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'MachineSimulator') THEN
+    CREATE DATABASE MachineSimulator;
+  ELSE
+    RAISE NOTICE 'La base de datos MachineSimulator ya existe.';
+  END IF;
+END $$;
+
+
 -- entry to data base
 \c MachineSimulator;
 
-CREATE LANGUAGE plpgsql;
 
 
 -- Create table for machines
@@ -37,12 +50,12 @@ CREATE TABLE simulations (
 
 
 -- Insert data into the machines table
-INSERT INTO machines (machine_id, machine_name) VALUES
-('MACHINE_A', 'Machine A'),
-('MACHINE_B', 'Machine B'),
-('MACHINE_C', 'Machine C'),
-('MACHINE_D', 'Machine D'),
-('MACHINE_E', 'Machine E');
+INSERT INTO machines (machine_id, machine_name , type_machine ) VALUES
+('MACHINE_A', 'Machine A' , NULL),
+('MACHINE_B', 'Machine B' , NULL),
+('MACHINE_C', 'Machine C', NULL),
+('MACHINE_D', 'Machine D', NULL),
+('MACHINE_E', 'Machine E' , NULL),
 ('MACHINE_F', 'Machine F' , 'fixtures');
 
 

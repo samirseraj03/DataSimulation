@@ -1,11 +1,9 @@
 fastapi
 pathlib
 starlette
-dotenv
+python-dotenv
 datetime
 psycopg2
-os
-re
 matplotlib
-io
-base64
+uvicorn
+jinja2

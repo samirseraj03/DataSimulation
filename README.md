@@ -1,9 +1,89 @@
 # SimulationOriginAI
 
 
+     - preguntas
+                    1. cuando se hace una solictud a la base de datos , solo se me devlovia una lista sin el nombre para cada variable y entonces accedia desde la posistion de la lista
+                    como se puede conseguir que la lista sea un objeto json
+                    
+                    3. la orginizacion de los archivos/carpetas no los tengo del todo claro si esta bien organizado o no
+
+
 como utilizar la app. 
 
-    simplemente desgarga docker y luego ejucuta dockercompose , recuerda modificar el env si es necesario!
+    simplemente desgarga docker y luego ejucuta dockercompose up , recuerda modificar el env si es necesario aunque no deberia!
+
+    casos de uso que puedes utilizar la app:
+        - puedes acceder al /  desde el navegador
+        - consulta las siguentes api
+            - puede ser desde postman o fastapi docs 
+                -metodo Get:
+                    - /simulations
+                        - devuelve todas las simulaciones
+                    - /simulations/{state} pending , running or finished
+                        - devuelve la simulaciones filtrado por estado
+                    - /order
+                        - devuelve lista ordenada de las simulaciones desde el nombre y la fecha
+                    - /machines/available 
+                        - devuelve maquinas disponibles
+                    - /simulations/detailed/{id_simulation} 
+                        - ejemplo  'SAM105'  devuelve detalles de la simulacion
+                    - /simulations/grafic/{id_simulation} 
+                        - ejemplo  'SAM105'  devulve una grafica en base64 
+                    - /simulations/data/{id_simulation}   
+                        - ejemplo  'SAM105' para obtener los datos sea en tiempo real o cuando ya se ha acabado
+                - metodo Post
+                    - /simulations 
+                        para agregar nueva simulacion
+
+                        siga esta lista y ponlo en el body:
+                            {
+                            'simulation_id' : 'SAM105',
+                            'name' : 'For IA' ,
+                            'status' : 'Pending',
+                            'start_date' : today,
+                            'end_date' : today,
+                            'machine_id' : 'MACHINE_F' 
+                            }
+
+how use app:
+
+    Simply download Docker and then run docker-compose up. Remember to modify the .env file if necessary, although it shouldn’t be required!
+
+    Use cases for the app:
+
+            You can access the root / from your browser.
+            Consult the following APIs:
+                This can be done using Postman or FastAPI docs.
+                    GET Method:
+                        /simulations
+                            Returns all simulations.
+                        /simulations/{state} (pending, running, or finished)
+                            Returns simulations filtered by state.
+                        /order
+                            Returns an ordered list of simulations by name and date.
+                        /machines/available
+                            Returns available machines.
+                        /simulations/detailed/{id_simulation}
+                            For example, 'SAM105' returns details of the simulation.
+                        /simulations/grafic/{id_simulation}
+                            For example, 'SAM105' returns a base64-encoded graphic.
+                        /simulations/data/{id_simulation}
+                            For example, 'SAM105' returns data, whether in real-time or once it has finished.
+                    POST Method:
+                            /simulations
+
+                                To add a new simulation.
+                                Follow this list and include it in the body:
+
+                            {
+                                'simulation_id': 'SAM105',
+                                'name': 'For IA',
+                                'status': 'Pending',
+                                'start_date': today,
+                                'end_date': today,
+                                'machine_id': 'MACHINE_F'
+                            }
+
 
 Spanish : 
 
@@ -32,7 +112,6 @@ Spanish :
             - docker
                 - he creado un docker compose para instalar dos contenedores para la base de datos y otro para el backend
                 - he creado un dockerfile para instalar los requirimientos para que funciones las apis
-                    - tenga en cuenta que no lo he probado por los recursos del portatil, he cogido codigo de proyectos anterires y los adapte aqui y con la ayuda de chatgpt lo deje bastante funcional
                 - el docker compose debe poder instalar los contendedors y insertar la informacion de base de datos y ejecutar fastApi automaticamente
 
             - postman
@@ -71,7 +150,6 @@ english:
 
         - I created a Docker Compose file to set up two containers, one for the database and another for the backend.
         - I created a Dockerfile to install the requirements for the APIs to function.
-            - Keep in mind that I haven't tested it due to the resources of my laptop. I took code from previous projects, adapted it here, and with the help of ChatGPT, made it quite functional.
             - The Docker Compose should be able to set up the containers, insert the database information, and automatically run FastAPI.
         Postman:
 
@@ -84,8 +162,9 @@ english:
         - In tools, I created a function to generate a graph that manages the data obtained from the simulation.
 
   
-            - preguntas
-                    1. cuando se hace una solictud a la base de datos , solo se me devlovia una lista sin el nombre para cada variable y entonces accedia desde la posistion de la lista
-                    como se puede conseguir que la lista sea un objeto json
-                    
-                    3. la orginizacion de los archivos no los tengo del todo claro si esta bien organizado o no
+
+
+
+
+
+       

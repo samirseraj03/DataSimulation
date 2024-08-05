@@ -54,6 +54,7 @@ async def get_machines_avaiable(request : Request):
 
 # api to post/create new simulation
 #The list should appear like this:
+# you need to use body to accept list
 """
     'simulation_id' : 'SAM105',
        'name' : 'For IA' ,
@@ -111,8 +112,6 @@ async def get_data_simulation(id_simulation: str , request : Request):
     except Exception as e:
         print(e)
         return templates.TemplateResponse("500.html", {"request": request}, status_code=500)
-
-
 
 
 #function to manage the request and return with a status
