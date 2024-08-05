@@ -51,7 +51,7 @@ how use app:
 
     Use cases for the app:
 
-            You can access the root / from your browser.
+            You can access the root / from your browser to see graph example , this graph use api .
             Consult the following APIs:
                 This can be done using Postman or FastAPI docs.
                     GET Method:
