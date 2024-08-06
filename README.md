@@ -2,11 +2,9 @@
 
 
      - preguntas
-                    1. cuando se hace una solictud a la base de datos , solo se me devlovia una lista sin el nombre para cada variable y entonces accedia desde la posistion de la lista
-                    como se puede conseguir que la lista sea un objeto json ?
+                    1. Cuando realizo una consulta a la base de datos, solo obtengo una lista sin los nombres de las columnas, lo que me obliga a acceder a los valores por su posición en la lista. ¿Cómo puedo obtener los resultados de la consulta en formato JSON, con nombres de columna incluidos?
                     
-                    3. la orginizacion de los archivos/carpetas no los tengo del todo claro si esta bien organizado o no ? 
-
+                    2. No tengo claro si la organización de mis archivos y carpetas es adecuada. Necesito algun consejo
 
 como utilizar la app. 
 
@@ -54,8 +52,10 @@ how use app:
     Simply download Docker and then run docker-compose up. Remember to modify the .env file if necessary, although it shouldn’t be required!
 
     you can test with test.py
+
         docker exec -it simulationoriginai-python-1 /bin/bash
-        then python test.py
+        then
+        python test.py
 
 
     Use cases for the app:
