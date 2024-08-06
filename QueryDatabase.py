@@ -1,7 +1,6 @@
 
 from dotenv import load_dotenv
-from datetime import datetime , timedelta
-import json
+
 import psycopg2
 import os
 
@@ -64,11 +63,11 @@ class Database:
         if exc_type is not None:
             print(f"Exception: {exc_val}")
         try:
-            if exc_type is None:  # Solo confirmar si no hubo excepción
+            if exc_type is None: 
                 self.commit()
         except Exception as e:
             print(f"Commit error: {e}")
-            self.rollback()  # Revertir cambios en caso de error durante commit
+            self.rollback() 
         finally:
             self.close()
 
