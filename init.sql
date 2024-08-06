@@ -73,16 +73,16 @@ CREATE TABLE data_simulations (
 
 -- Insert data into the simulations table
 INSERT INTO simulations (simulation_id, name, status, start_date, end_date, machine_id) VALUES
-('SIM123', 'Airflow Test', 'Pending', NULL, NULL, NULL),
-('SIM456', 'Structural Analysis', 'In Progress', '2024-08-02 10:00:00', NULL, 'MACHINE_A'),
-('SIM789', 'Traffic Simulation', 'Completed', '2024-07-31 15:30:00', '2024-08-01 02:15:00', 'MACHINE_B'),
-('SIM101', 'Thermal Analysis', 'Pending', NULL, NULL, NULL),
-('SIM102', 'Fluid Dynamics', 'In Progress', '2024-08-01 09:00:00', NULL, 'MACHINE_C'),
-('SIM103', 'Mechanical Stress Test', 'Completed', '2024-07-30 08:00:00', '2024-07-30 20:00:00', 'MACHINE_D'),
-('SIM104', 'Electric Field Simulation', 'Pending', NULL, NULL, NULL),
-('SIM105', 'Acoustic Analysis', 'In Progress', '2024-08-03 11:00:00', NULL, 'MACHINE_E'),
-('SIM106', 'Radiation Pattern Test', 'Completed', '2024-07-29 14:00:00', '2024-07-29 18:00:00', 'MACHINE_A'),
-('SIM107', 'Network Traffic Simulation', 'Pending', NULL, NULL, NULL);
+('SIM123', 'Airflow Test', 'pending ', NULL, NULL, NULL),
+('SIM456', 'Structural Analysis', 'running ', '2024-08-02 10:00:00', NULL, 'MACHINE_A'),
+('SIM789', 'Traffic Simulation', 'finished ', '2024-07-31 15:30:00', '2024-08-01 02:15:00', 'MACHINE_B'),
+('SIM101', 'Thermal Analysis', 'pending ', NULL, NULL, NULL),
+('SIM102', 'Fluid Dynamics', 'running ', '2024-08-01 09:00:00', NULL, 'MACHINE_C'),
+('SIM103', 'Mechanical Stress Test', 'finished ', '2024-07-30 08:00:00', '2024-07-30 20:00:00', 'MACHINE_D'),
+('SIM104', 'Electric Field Simulation', 'pending ', NULL, NULL, NULL),
+('SIM105', 'Acoustic Analysis', 'running', '2024-08-03 11:00:00', NULL, 'MACHINE_E'),
+('SIM106', 'Radiation Pattern Test', 'finished ', '2024-07-29 14:00:00', '2024-07-29 18:00:00', 'MACHINE_A'),
+('SIM107', 'Network Traffic Simulation', 'pending ', NULL, NULL, NULL);
 
 
 

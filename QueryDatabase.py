@@ -1,7 +1,7 @@
 
 from dotenv import load_dotenv
 from datetime import datetime , timedelta
-
+import json
 import psycopg2
 import os
 
@@ -40,7 +40,6 @@ class Database:
     def commit(self):
         if self.connection:
             self.connection.commit()
-            print("Transacción confirmada.")
 
     # Revertir cambios
     def rollback(self):
@@ -54,7 +53,6 @@ class Database:
             self.cursor.close()
         if self.connection:
             self.connection.close()
-        print("Conexión cerrada.")
 
     # willenter database
     def __enter__(self):
@@ -154,6 +152,7 @@ def get_data_simulations(simulation_id):
 
 
 
-if __name__ == '__main__':
-    OrderList()
+
+if __name__ == "__main__":
+    print (filter_simulations_bystat('pending'))
 

@@ -30,27 +30,3 @@ def generate_chart(data):
 
 
 
-if __name__ == '__main__':
-
-    data = [
-    [6, "SIM789", "MACHINE_B", 10, 0.55],
-    [7, "SIM789", "MACHINE_B", 20, 0.5],
-    [8, "SIM789", "MACHINE_B", 30, 0.45],
-    [9, "SIM789", "MACHINE_B", 40, 0.4],
-    [10, "SIM789", "MACHINE_B", 50, 0.35]
-]
-
-    print(generate_chart(data))
-
-
-    # list = {
-    #    'simulation_id' : 'SAM105',
-    #    'name' : 'For IA' ,
-    #    'status' : 'Pending',
-    #    'start_date' : chop_microseconds(datetime.today()),
-    #    'end_date' : chop_microseconds(datetime.today() + datetime.timedelta(days = 1) ),
-    #    'machine_id' : 'MACHINE_F'
-    # }
-
-    # print (list)
-    # print (chop_microseconds(datetime.today()))

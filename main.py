@@ -1,9 +1,10 @@
 from fastapi import FastAPI  , Request 
 from fastapi.responses import HTMLResponse , JSONResponse 
 from fastapi.staticfiles import StaticFiles
-from pathlib import Path
 from fastapi.templating import Jinja2Templates
 from fastapi.encoders import jsonable_encoder
+
+
 from starlette.requests import Request
 
 import QueryDatabase
@@ -24,7 +25,6 @@ async def read_index(request: Request):
     data = QueryDatabase.get_data_simulations('SIM789')
     chart_data = tools.generate_chart(data)
 
-    #index_file = Path("templates/index.html")
     return templates.TemplateResponse("index.html", {"request": request, "chart_data": chart_data})
 
 
@@ -78,7 +78,7 @@ async def get_detailed_simulation(id_simulation: str , request : Request):
     return await handle_request(lambda: QueryDatabase.get_detailed_simulation(id_simulation), request)
  
 
-# api to get grafic
+# api to get grafic recoleting data  specifying the id_simulation
 @app.get("/simulations/grafic/{id_simulation}", response_class=HTMLResponse)
 async def get_grafic(id_simulation: str , request : Request):
     return await handle_request(lambda: tools.generate_chart(id_simulation), request) 
@@ -118,7 +118,6 @@ async def get_data_simulation(id_simulation: str , request : Request):
 async def handle_request(query_func, request: Request):
     try:        
         data = query_func()
-        print (data)
         if data:
             return JSONResponse(content=jsonable_encoder(data), status_code=200)
         else:

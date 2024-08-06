@@ -3,14 +3,18 @@
 
      - preguntas
                     1. cuando se hace una solictud a la base de datos , solo se me devlovia una lista sin el nombre para cada variable y entonces accedia desde la posistion de la lista
-                    como se puede conseguir que la lista sea un objeto json
+                    como se puede conseguir que la lista sea un objeto json ?
                     
-                    3. la orginizacion de los archivos/carpetas no los tengo del todo claro si esta bien organizado o no
+                    3. la orginizacion de los archivos/carpetas no los tengo del todo claro si esta bien organizado o no ? 
 
 
 como utilizar la app. 
 
-    simplemente desgarga docker y luego ejucuta dockercompose up , recuerda modificar el env si es necesario aunque no deberia!
+    simplemente desgarga docker y luego ejucuta docker compose up -d , recuerda modificar el env si es necesario aunque no deberia!
+
+    puedes hacer test con test.py 
+        docker exec -it simulationoriginai-python-1 /bin/bash
+        luego python test.py
 
     casos de uso que puedes utilizar la app:
         - puedes acceder al /  desde el navegador
@@ -48,6 +52,11 @@ como utilizar la app.
 how use app:
 
     Simply download Docker and then run docker-compose up. Remember to modify the .env file if necessary, although it shouldn’t be required!
+
+    you can test with test.py
+        docker exec -it simulationoriginai-python-1 /bin/bash
+        then python test.py
+
 
     Use cases for the app:
 
@@ -114,10 +123,10 @@ Spanish :
                 - he creado un dockerfile para instalar los requirimientos para que funciones las apis
                 - el docker compose debe poder instalar los contendedors y insertar la informacion de base de datos y ejecutar fastApi automaticamente
 
-            - postman
+            - test
                 - utilize postman para hacer las comprobaciones que funcionban las apis , aunque mas tarde descubri fastApi docs
+                - he creado test.py para comprobar las Apis funcionan bien
 
-                ![alt text](image.png)
 
 
             Grafica de datos:
@@ -151,11 +160,10 @@ english:
         - I created a Docker Compose file to set up two containers, one for the database and another for the backend.
         - I created a Dockerfile to install the requirements for the APIs to function.
             - The Docker Compose should be able to set up the containers, insert the database information, and automatically run FastAPI.
-        Postman:
+        test:
 
         - I used Postman to check if the APIs were working, although I later discovered FastAPI docs.
-
-        ![alt text](image.png)
+        - I have created test.py to check the APIs are working fine
 
 
         Data Graph:
